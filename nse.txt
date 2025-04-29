@@ -1,0 +1,52 @@
+-- 1. Writing the NSE Script
+-- ATS Detection NSE Script (ais-detect.nse)
+
+description = [[
+  Detect AIS (Automatic Identification System) transponders by checking
+  for open port 5631 and attempting a simple handshake.
+]]
+
+author = "Agnik Das"
+license = "Same as Nmap"
+categories = {"discovery", "safe"}
+
+-- Define when the script should run (on port 5631)
+portrule = function(host, port)
+  return port.number == 5631 and port.protocol == "tcp"
+end
+
+-- Define the main action of the script
+action = function(host, port)
+  local socket = nmap.new_socket()  -- Create a new socket for communication
+  socket:set_timeout(5000)          -- Set timeout to 5 seconds
+
+  local status, err = socket:connect(host.ip, port.number)
+  if not status then
+    return "Failed to connect: " .. err
+  end
+
+  -- Sending a basic AIS query
+  socket:send("AIS Query\r\n")
+
+  -- Receiving Response
+  local response = socket:receive()
+  socket:close()
+
+  if response then
+    return "ATS Device Found: " .. response
+  else
+    return "Port open but no response received."
+  end
+end
+
+
+
+command:
+
+sudo mv ais-detect.nse /usr/share/nmap/scripts/
+
+sudo nmap --script-updated
+
+sudo nmap --script=ais-detect.nse -p 5631 <target_ip>
+
+sudo nmap -iL targets.txt -p 5631 --script=ais-detect.nse
