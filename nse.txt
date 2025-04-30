@@ -64,6 +64,5 @@ Search for Speribic Camera Brands: shodan search "Netcam Live shodom seareh "AvT
 
 Find Open RTSP Streams (Live Video): shodom search "RTsp' post: 5541
 
-
-Extrarting 7 TPs and Saving Results : To you need to extract only Its brom results: shodam search "ATs" port:5634 --bields ip str To save the results to a bile: shodom seareh "ATs" pant :5631 --bields ip-strys
-
+Extrarting 7 TPs and Saving Results : To you need to extract only Its brom results: shodam search "ATs" port:5634 --bields ip str To save the results to a bile: 
+shodan search "ATs" pant :5631 --bields ip-str > ship.txtl
