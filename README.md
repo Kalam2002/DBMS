@@ -1,1 +1,1 @@
-only for study purpose, dont misuse it.
+Only for study purpose,Please Donot misuse it.
