@@ -1,0 +1,32 @@
+sudo ip addr flush dev eth0
+sudo ip addr add 192.168.1.100/24 dev eth0
+sudo ip link set dev eth0 up
+
+add defualt gateway if needed:
+sudo ip route add default via 192.168.1.1
+
+
+using hping:
+
+sudo hping3 -a <spoofed-IP> <target-IP> [options]
+
+example:(icmp)
+
+sudo hping3 -a 192.168.1.100 -1 -I eth0 192.168.1.1
+
+Example 2: Send Spoofed TCP SYN Packet to Port 80
+
+sudo hping3 -a 192.168.1.100 -S -p 80 -I eth0 192.168.1.1
+
+Option	Description
+
+-S	Set TCP SYN flag
+-p 80	Target port
+Others same as above	
+
+
+Example 3: Flood Target with UDP Spoofed Packets
+
+sudo hping3 -a 192.168.1.100 --udp -p 53 --flood -I eth0 192.168.1.1
+
+⚠️ This can simulate a UDP flood — only use in lab setup.
