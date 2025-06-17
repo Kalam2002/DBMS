@@ -1,0 +1,63 @@
+
+---
+
+📋 Questions Breakdown:
+
+Q1. Demonstrate TCP Session Hijacking using Scapy or manually constructed packets (10 marks)
+
+Steps:
+
+(a) Monitor a TCP session and identify the correct sequence number
+
+(b) Inject a spoofed packet (e.g., a fake command or payload)
+
+(c) Show the session disruption or data tampering on the victim’s end
+
+
+CO Mapping: PCC-CS691.4
+PO Mapping: PO1, PO2, PO5, PO9
+BT Level: 3
+
+
+---
+
+Q2. Perform Shodan-based reconnaissance (10 marks)
+
+Steps:
+
+(a) Locate boats and ship communication/GPS systems
+
+(b) Search and identify live internet-connected cameras
+
+(c) Write and execute a small Nmap NSE script to automate fingerprinting of one discovered device
+
+
+CO Mapping: PCC-CS691.3
+PO Mapping: PO1, PO2, PO5, PO9
+BT Level: 4
+
+
+---
+
+Q3. Implement a Site-to-Site VPN tunnel using Cisco Packet Tracer (20 marks)
+
+CO Mapping: PCC-CS691.4
+PO Mapping: PO1, PO2, PO5, PO9
+BT Level: 4
+
+
+---
+
+Would you like:
+
+Viva questions for each experiment?
+
+Detailed steps for execution?
+
+Scapy/Nmap scripts for Q1 and Q2?
+
+Cisco Packet Tracer steps for VPN in Q3?
+
+
+Let me know how you'd like to proceed.
+
